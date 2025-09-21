@@ -1,0 +1,161 @@
+# Rent-A-Car System
+
+A console-based car rental system built with **Java 21**, **PostgreSQL**, and **JDBC**.  
+This project was developed as a final project to demonstrate layered architecture, business rules, and database integration.
+
+---
+
+## 🚀 Technologies
+- Java 21
+- PostgreSQL 16+
+- JDBC
+- Maven
+
+---
+
+## 📂 Project Structure
+
+src/main/java/com/tolgademir/rentacar
+
+├── model # Entity classes (User, Vehicle, Rental, etc.)
+
+├── dao # Data Access Objects (DB operations)
+
+├── service # Business logic
+
+├── util # Utilities (DBConnection, HashUtil)
+
+└── ui # Console menus (Main, AdminMenu, CustomerMenu)
+
+---
+
+## 👤 User Roles
+- **ADMIN**
+    - Add / List vehicles
+
+- **CUSTOMER**
+    - List vehicles
+    - Rent vehicles
+    - View rentals
+    - Cancel / Complete rentals
+
+---
+
+## 📌 Business Rules
+- **Login/Register** → Email + password (hashed with SHA-256).
+- **Corporate accounts** must rent for **at least 30 days**.
+- If **vehicle value > 2,000,000 TL**:
+    - Customer must be **≥ 30 years old**.
+    - A **10% deposit** is required.
+- Date overlap check → A vehicle cannot be rented in overlapping periods.
+- Deposit lifecycle:
+    - On rent → deposit is reserved.
+    - On cancel → deposit refunded.
+    - On complete → deposit refunded (or adjusted).
+
+---
+
+## 🗄️ Database Schema
+**users**
+- id (PK)
+- name
+- email (unique, not null)
+- password_hash
+- role (ADMIN/CUSTOMER)
+- account_type (INDIVIDUAL/CORPORATE)
+- age
+
+**vehicles**
+- id (PK)
+- type (CAR/MOTORCYCLE/HELICOPTER)
+- brand
+- model
+- value
+- price_hourly / daily / weekly / monthly
+
+**rentals**
+- id (PK)
+- user_id (FK → users.id)
+- vehicle_id (FK → vehicles.id)
+- start_date / end_date
+- deposit
+- status (ACTIVE/CANCELLED/COMPLETED)
+
+---
+
+## 🌱 Seed Data
+Example initial data for testing:
+
+### Users
+- **Admin** → `admin@test.com / admin123`
+- **Corporate** → `corp@test.com / 12345`
+- **Individual** → `user@test.com / 12345`
+
+### Vehicles
+- BMW 320i → 1.500.000 TL
+- Mercedes E200 → 2.500.000 TL
+- Honda Civic → 900.000 TL
+- Yamaha R6 → 450.000 TL
+- Bell 407 (Helicopter) → 8.000.000 TL
+- Fiat Egea → 600.000 TL
+
+---
+
+## ▶️ Run Instructions
+
+1. Create PostgreSQL database:
+   ```sql
+   CREATE DATABASE rentacar;
+
+   Run schema.sql to create tables.
+
+2. Run schema.sql to create tables.
+
+3. Run seed_data.sql to insert sample users and vehicles.
+
+4. Start the application in IntelliJ:
+
+   └── Main.java
+
+5. Login with seed users and test the system.
+
+---
+
+## 📖 Example Usage
+
+=== RENT-A-CAR SYSTEM ===
+1. Register
+2. Login
+0. Exit
+
+*Select: 2
+Email: corp@test.com
+Password: 12345
+✅ Login successful: corp@test.com
+
+=== CUSTOMER MENU ===
+1. List Vehicles
+2. Rent Vehicle
+3. My Rentals
+4. Cancel Rental
+5. Complete Rental
+0. Logout
+
+---
+
+## 📜 License
+
+This project is licensed under the **MIT License**.  
+You are free to use, modify, and distribute this project, provided that proper credit is given.
+
+See the [LICENSE](LICENSE) file for full license details.
+
+---
+
+## 👤 Author
+
+- **Tolga Demir**  
+  Back-End Developer | Java | PostgreSQL | JDBC  
+  [GitHub](https://github.com/tolgademir-co) · [LinkedIn](https://www.linkedin.com/in/tolgademir-co/)
+
+---

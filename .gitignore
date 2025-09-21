@@ -1,0 +1,48 @@
+### Java ###
+*.class
+*.log
+*.ctxt
+hs_err_pid*
+replay_pid*
+
+### Package Files ###
+*.jar
+*.war
+*.ear
+
+### Maven ###
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+.mvn/wrapper/maven-wrapper.jar
+
+### IntelliJ IDEA ###
+.idea/
+*.iws
+*.iml
+*.ipr
+
+### IntelliJ cache & output ###
+out/
+
+### VS Code ###
+.vscode/
+
+### Eclipse (bazı arkadaşlar Eclipse ile de açabilir) ###
+.classpath
+.project
+.settings/
+.springBeans
+
+### NetBeans ###
+nbproject/private/
+build/
+nbbuild/
+dist/
+nb-gradle/
