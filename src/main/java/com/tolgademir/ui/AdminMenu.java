@@ -12,7 +12,7 @@ import java.util.Scanner;
 
 /**
  * Admin menu for vehicle management
- * // Admin menüsü -> araç ekleme ve listeleme işlemleri
+ * // Admin menüsü -> araç ekleme, listeleme, güncelleme ve silme işlemleri
  */
 public class AdminMenu {
     private final User adminUser;
@@ -28,6 +28,8 @@ public class AdminMenu {
             System.out.println("\n=== ADMIN MENU ===");
             System.out.println("1. Add Vehicle");
             System.out.println("2. List Vehicles");
+            System.out.println("3. Update Vehicle");
+            System.out.println("4. Delete Vehicle");
             System.out.println("0. Logout");
             System.out.print("Select: ");
 
@@ -37,6 +39,8 @@ public class AdminMenu {
             switch (choice) {
                 case 1 -> addVehicle();
                 case 2 -> listVehicles();
+                case 3 -> updateVehicle();
+                case 4 -> deleteVehicle();
                 case 0 -> {
                     System.out.println("👋 Logout successful.");
                     return;
@@ -76,12 +80,72 @@ public class AdminMenu {
             }
         }
 
-        vehicleService.addVehicle(vehicle);
+        if (vehicleService.addVehicle(vehicle)) {
+            System.out.println("✅ Vehicle added successfully!");
+        } else {
+            System.out.println("❌ Failed to add vehicle.");
+        }
     }
 
     private void listVehicles() {
         List<Vehicle> vehicles = vehicleService.listVehicles();
         System.out.println("=== VEHICLES ===");
         vehicles.forEach(System.out::println);
+    }
+
+    private void updateVehicle() {
+        listVehicles();
+        System.out.print("Enter vehicle ID to update: ");
+        int id = scanner.nextInt();
+        scanner.nextLine();
+
+        Vehicle existing = vehicleService.getVehicleById(id);
+        if (existing == null) {
+            System.out.println("❌ Vehicle not found.");
+            return;
+        }
+
+        System.out.print("New Brand: ");
+        String brand = scanner.nextLine();
+        System.out.print("New Model: ");
+        String model = scanner.nextLine();
+        System.out.print("New Value: ");
+        double value = scanner.nextDouble();
+        System.out.print("New Hourly Price: ");
+        double priceHourly = scanner.nextDouble();
+        System.out.print("New Daily Price: ");
+        double priceDaily = scanner.nextDouble();
+        System.out.print("New Weekly Price: ");
+        double priceWeekly = scanner.nextDouble();
+        System.out.print("New Monthly Price: ");
+        double priceMonthly = scanner.nextDouble();
+        scanner.nextLine();
+
+        existing.setBrand(brand);
+        existing.setModel(model);
+        existing.setValue(value);
+        existing.setPriceHourly(priceHourly);
+        existing.setPriceDaily(priceDaily);
+        existing.setPriceWeekly(priceWeekly);
+        existing.setPriceMonthly(priceMonthly);
+
+        if (vehicleService.updateVehicle(existing)) {
+            System.out.println("✅ Vehicle updated successfully!");
+        } else {
+            System.out.println("❌ Failed to update vehicle.");
+        }
+    }
+
+    private void deleteVehicle() {
+        listVehicles();
+        System.out.print("Enter vehicle ID to delete: ");
+        int id = scanner.nextInt();
+        scanner.nextLine();
+
+        if (vehicleService.deleteVehicle(id)) {
+            System.out.println("✅ Vehicle deleted successfully!");
+        } else {
+            System.out.println("❌ Failed to delete vehicle.");
+        }
     }
 }

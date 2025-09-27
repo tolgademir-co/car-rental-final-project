@@ -17,27 +17,32 @@ This project was developed as a final project to demonstrate layered architectur
 
 src/main/java/com/tolgademir/rentacar
 
-├── model # Entity classes (User, Vehicle, Rental, etc.)
+├── model # Entity classes (Car, Helicopter, Motorcycle, Rental, User, Vehicle)
 
-├── dao # Data Access Objects (DB operations)
+├── dao # Data Access Objects (RentalDao, UserDao, VehicleDao)
 
-├── service # Business logic
+├── service # Business logic (RentalService, UserService, VehicleService)
 
 ├── util # Utilities (DBConnection, HashUtil)
 
-└── ui # Console menus (Main, AdminMenu, CustomerMenu)
+└── ui # Console menus (AdminMenu, CustomerMenu, Main)
 
 ---
 
 ## 👤 User Roles
 - **ADMIN**
-    - Add / List vehicles
+    - Add / List Vehicle
+    - Update Vehicle
+    - Delete Vehicle
+    - Logout
+
 
 - **CUSTOMER**
-    - List vehicles
-    - Rent vehicles
-    - View rentals
-    - Cancel / Complete rentals
+    - List Vehicles
+    - Rent Vehicles
+    - My Rentals
+    - Cancel / Complete Rentals
+    - Logout
 
 ---
 

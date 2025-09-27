@@ -110,4 +110,45 @@ public class VehicleDao {
         }
         return vehicles;
     }
+
+    /**
+     * Update vehicle
+     * // Aracı günceller
+     */
+    public boolean update(Vehicle vehicle) {
+        String sql = "UPDATE vehicles SET type = ?, brand = ?, model = ?, value = ?, price_hourly = ?, price_daily = ?, price_weekly = ?, price_monthly = ? WHERE id = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, vehicle.getType());
+            stmt.setString(2, vehicle.getBrand());
+            stmt.setString(3, vehicle.getModel());
+            stmt.setDouble(4, vehicle.getValue());
+            stmt.setDouble(5, vehicle.getPriceHourly());
+            stmt.setDouble(6, vehicle.getPriceDaily());
+            stmt.setDouble(7, vehicle.getPriceWeekly());
+            stmt.setDouble(8, vehicle.getPriceMonthly());
+            stmt.setInt(9, vehicle.getId());
+
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            throw new RuntimeException("❌ Failed to update vehicle: " + e.getMessage(), e);
+        }
+    }
+
+    /**
+     * Delete vehicle
+     * // Aracı siler
+     */
+    public boolean delete(int id) {
+        String sql = "DELETE FROM vehicles WHERE id = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, id);
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            throw new RuntimeException("❌ Failed to delete vehicle: " + e.getMessage(), e);
+        }
+    }
 }

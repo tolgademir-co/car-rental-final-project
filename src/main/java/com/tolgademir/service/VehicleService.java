@@ -35,4 +35,20 @@ public class VehicleService {
     public Vehicle getVehicleById(int id) {
         return vehicleDao.findById(id);
     }
+
+    /**
+     * Update vehicle
+     * // Aracı günceller
+     */
+    public boolean updateVehicle(Vehicle vehicle) {
+        return vehicleDao.update(vehicle);
+    }
+
+    /**
+     * Delete vehicle
+     * // Aracı siler
+     */
+    public boolean deleteVehicle(int id) {
+        return vehicleDao.delete(id);
+    }
 }
