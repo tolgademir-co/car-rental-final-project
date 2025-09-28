@@ -35,7 +35,7 @@ out/
 ### VS Code ###
 .vscode/
 
-### Eclipse (bazı arkadaşlar Eclipse ile de açabilir) ###
+### Eclipse ###
 .classpath
 .project
 .settings/
@@ -47,3 +47,13 @@ build/
 nbbuild/
 dist/
 nb-gradle/
+
+### --- CUSTOM (Security & Config) ---
+# Gerçek config dosyalarını gizle
+src/main/resources/application.properties
+src/main/resources/secrets.properties
+*.env
+
+# Eğer Docker veya CI/CD kullanıyorsan
+.env
+docker-compose.override.yml
