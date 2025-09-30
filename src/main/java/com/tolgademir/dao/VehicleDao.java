@@ -1,5 +1,8 @@
 package com.tolgademir.dao;
 
+import com.tolgademir.model.Car;
+import com.tolgademir.model.Helicopter;
+import com.tolgademir.model.Motorcycle;
 import com.tolgademir.model.Vehicle;
 import com.tolgademir.util.DBConnection;
 
@@ -53,22 +56,7 @@ public class VehicleDao {
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
-                return new Vehicle(
-                        rs.getInt("id"),
-                        rs.getString("type"),
-                        rs.getString("brand"),
-                        rs.getString("model"),
-                        rs.getDouble("value"),
-                        rs.getDouble("price_hourly"),
-                        rs.getDouble("price_daily"),
-                        rs.getDouble("price_weekly"),
-                        rs.getDouble("price_monthly")
-                ) {
-                    @Override
-                    public double calculatePrice(String rentalType, int duration) {
-                        return 0; // sadece DB için
-                    }
-                };
+                return mapToVehicle(rs);
             }
         } catch (SQLException e) {
             throw new RuntimeException("❌ Failed to find vehicle: " + e.getMessage(), e);
@@ -88,25 +76,35 @@ public class VehicleDao {
              ResultSet rs = stmt.executeQuery(sql)) {
 
             while (rs.next()) {
-                vehicles.add(new Vehicle(
-                        rs.getInt("id"),
-                        rs.getString("type"),
-                        rs.getString("brand"),
-                        rs.getString("model"),
-                        rs.getDouble("value"),
-                        rs.getDouble("price_hourly"),
-                        rs.getDouble("price_daily"),
-                        rs.getDouble("price_weekly"),
-                        rs.getDouble("price_monthly")
-                ) {
-                    @Override
-                    public double calculatePrice(String rentalType, int duration) {
-                        return 0;
-                    }
-                });
+                vehicles.add(mapToVehicle(rs));
             }
         } catch (SQLException e) {
             throw new RuntimeException("❌ Failed to list vehicles: " + e.getMessage(), e);
+        }
+        return vehicles;
+    }
+
+    /**
+     * ✅ List vehicles with pagination
+     * // Araçları sayfalama ile listeler
+     */
+    public List<Vehicle> findAllPaged(int page, int pageSize) {
+        List<Vehicle> vehicles = new ArrayList<>();
+        String sql = "SELECT * FROM vehicles ORDER BY id LIMIT ? OFFSET ?";
+        int offset = (page - 1) * pageSize;
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, pageSize);
+            stmt.setInt(2, offset);
+
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                vehicles.add(mapToVehicle(rs));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("❌ Failed to fetch vehicles with pagination: " + e.getMessage(), e);
         }
         return vehicles;
     }
@@ -150,5 +148,28 @@ public class VehicleDao {
         } catch (SQLException e) {
             throw new RuntimeException("❌ Failed to delete vehicle: " + e.getMessage(), e);
         }
+    }
+
+    /**
+     * Map ResultSet to correct Vehicle subclass
+     * // DB’den gelen satırı doğru alt sınıfa dönüştürür
+     */
+    private Vehicle mapToVehicle(ResultSet rs) throws SQLException {
+        String type = rs.getString("type");
+        int id = rs.getInt("id");
+        String brand = rs.getString("brand");
+        String model = rs.getString("model");
+        double value = rs.getDouble("value");
+        double priceHourly = rs.getDouble("price_hourly");
+        double priceDaily = rs.getDouble("price_daily");
+        double priceWeekly = rs.getDouble("price_weekly");
+        double priceMonthly = rs.getDouble("price_monthly");
+
+        return switch (type.toUpperCase()) {
+            case "CAR" -> new Car(id, brand, model, value, priceHourly, priceDaily, priceWeekly, priceMonthly);
+            case "MOTORCYCLE" -> new Motorcycle(id, brand, model, value, priceHourly, priceDaily, priceWeekly, priceMonthly);
+            case "HELICOPTER" -> new Helicopter(id, brand, model, value, priceHourly, priceDaily, priceWeekly, priceMonthly);
+            default -> throw new IllegalArgumentException("❌ Unknown vehicle type: " + type);
+        };
     }
 }

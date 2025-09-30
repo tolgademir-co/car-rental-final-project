@@ -36,10 +36,13 @@ CREATE TABLE vehicles
 CREATE TABLE rentals
 (
     id         SERIAL PRIMARY KEY,
-    user_id    INT REFERENCES users (id) ON DELETE CASCADE,
-    vehicle_id INT REFERENCES vehicles (id) ON DELETE CASCADE,
-    start_date TIMESTAMP                                                          NOT NULL,
-    end_date   TIMESTAMP                                                          NOT NULL,
-    deposit    NUMERIC(15, 2) DEFAULT 0,
-    status     VARCHAR(20) CHECK (status IN ('ACTIVE', 'CANCELLED', 'COMPLETED')) NOT NULL
+    user_id    INT       NOT NULL,
+    vehicle_id INT       NOT NULL,
+    start_date TIMESTAMP NOT NULL,
+    end_date   TIMESTAMP NOT NULL,
+    deposit    DOUBLE PRECISION DEFAULT 0,
+    status     VARCHAR(20)      DEFAULT 'ACTIVE',
+    price      DOUBLE PRECISION DEFAULT 0,
+    CONSTRAINT fk_rentals_user FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE,
+    CONSTRAINT fk_rentals_vehicle FOREIGN KEY (vehicle_id) REFERENCES vehicles (id) ON DELETE CASCADE
 );

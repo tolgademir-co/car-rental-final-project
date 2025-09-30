@@ -31,16 +31,16 @@ src/main/java/com/tolgademir/rentacar
 
 ## 👤 User Roles
 - **ADMIN**
-    - Add / List Vehicle
+    - Add / List Vehicle (with pagination)
     - Update Vehicle
     - Delete Vehicle
+    - View All Rentals (detailed with JOIN)
     - Logout
 
-
 - **CUSTOMER**
-    - List Vehicles
+    - List Vehicles (with pagination & filters)
     - Rent Vehicles
-    - My Rentals
+    - My Rentals (detailed with JOIN)
     - Cancel / Complete Rentals
     - Logout
 
@@ -57,6 +57,12 @@ src/main/java/com/tolgademir/rentacar
     - On rent → deposit is reserved.
     - On cancel → deposit refunded.
     - On complete → deposit refunded (or adjusted).
+- **Dynamic pricing**:
+    - Hourly, Daily, Weekly, Monthly price calculation depending on rental duration.
+- **Transactions**:
+    - Rental creation, cancellation, and completion are handled inside transaction blocks (`commit / rollback`) to ensure data consistency.
+- **JOIN Queries**:
+    - Rentals are listed with user and vehicle details for both customers and admins.
 
 ---
 
@@ -85,6 +91,7 @@ src/main/java/com/tolgademir/rentacar
 - start_date / end_date
 - deposit
 - status (ACTIVE/CANCELLED/COMPLETED)
+- price
 
 ---
 
@@ -139,9 +146,9 @@ Password: 12345
 ✅ Login successful: corp@test.com
 
 === CUSTOMER MENU ===
-1. List Vehicles
+1. List Vehicles (Paged)
 2. Rent Vehicle
-3. My Rentals
+3. My Rentals (Detailed)
 4. Cancel Rental
 5. Complete Rental
 0. Logout

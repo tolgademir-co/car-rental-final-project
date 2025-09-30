@@ -14,10 +14,12 @@ public class Rental {
     private LocalDateTime endDate;
     private double deposit;
     private String status; // ACTIVE | CANCELLED | COMPLETED
+    private double price;  // 💡 Kiralama ücreti
 
+    // --- Constructor (price dahil) ---
     public Rental(int id, int userId, int vehicleId,
                   LocalDateTime startDate, LocalDateTime endDate,
-                  double deposit, String status) {
+                  double deposit, String status, double price) {
         this.id = id;
         this.userId = userId;
         this.vehicleId = vehicleId;
@@ -25,6 +27,14 @@ public class Rental {
         this.endDate = endDate;
         this.deposit = deposit;
         this.status = status;
+        this.price = price;
+    }
+
+    // --- Overloaded Constructor (price olmadan, eski kullanım için) ---
+    public Rental(int id, int userId, int vehicleId,
+                  LocalDateTime startDate, LocalDateTime endDate,
+                  double deposit, String status) {
+        this(id, userId, vehicleId, startDate, endDate, deposit, status, 0.0);
     }
 
     // --- Getters & Setters ---
@@ -49,6 +59,9 @@ public class Rental {
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }
 
+    public double getPrice() { return price; }
+    public void setPrice(double price) { this.price = price; }
+
     @Override
     public String toString() {
         return "Rental{" +
@@ -59,6 +72,7 @@ public class Rental {
                 ", endDate=" + endDate +
                 ", deposit=" + deposit +
                 ", status='" + status + '\'' +
+                ", price=" + price +
                 '}';
     }
 }

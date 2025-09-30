@@ -12,42 +12,32 @@ import java.util.List;
 public class VehicleService {
     private final VehicleDao vehicleDao = new VehicleDao();
 
-    /**
-     * Add a new vehicle
-     * // Yeni araç ekler
-     */
+    // Create
     public boolean addVehicle(Vehicle vehicle) {
         return vehicleDao.insert(vehicle);
     }
 
-    /**
-     * List all vehicles
-     * // Tüm araçları listeler
-     */
+    // Read - list all
     public List<Vehicle> listVehicles() {
         return vehicleDao.findAll();
     }
 
-    /**
-     * Find vehicle by ID
-     * // ID ile araç bulur
-     */
+    // ✅ Read - list with pagination
+    public List<Vehicle> listVehiclesPaged(int page, int pageSize) {
+        return vehicleDao.findAllPaged(page, pageSize);
+    }
+
+    // Read - by ID
     public Vehicle getVehicleById(int id) {
         return vehicleDao.findById(id);
     }
 
-    /**
-     * Update vehicle
-     * // Aracı günceller
-     */
+    // Update
     public boolean updateVehicle(Vehicle vehicle) {
         return vehicleDao.update(vehicle);
     }
 
-    /**
-     * Delete vehicle
-     * // Aracı siler
-     */
+    // Delete
     public boolean deleteVehicle(int id) {
         return vehicleDao.delete(id);
     }

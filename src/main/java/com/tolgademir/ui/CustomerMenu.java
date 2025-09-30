@@ -1,6 +1,6 @@
 package com.tolgademir.ui;
 
-import com.tolgademir.model.Rental;
+import com.tolgademir.model.RentalDetail;
 import com.tolgademir.model.User;
 import com.tolgademir.service.RentalService;
 import com.tolgademir.service.VehicleService;
@@ -66,14 +66,28 @@ public class CustomerMenu {
         System.out.print("End date (YYYY-MM-DDTHH:MM): ");
         LocalDateTime end = LocalDateTime.parse(scanner.nextLine());
 
-        Rental rental = new Rental(0, customerUser.getId(), vehicleId, start, end, 0, "ACTIVE");
+        // price ve deposit service tarafından hesaplanıyor
+        com.tolgademir.model.Rental rental =
+                new com.tolgademir.model.Rental(0, customerUser.getId(), vehicleId, start, end, 0, "ACTIVE", 0);
         rentalService.createRental(rental);
     }
 
     private void myRentals() {
-        List<Rental> rentals = rentalService.getRentalsByUser(customerUser.getId());
-        System.out.println("=== MY RENTALS ===");
-        rentals.forEach(System.out::println);
+        System.out.println("=== MY RENTALS (DETAILED) ===");
+        List<RentalDetail> rentalDetails = rentalService.getRentalDetailsByUser(customerUser.getId());
+
+        if (rentalDetails.isEmpty()) {
+            System.out.println("❌ You have no rentals.");
+        } else {
+            for (RentalDetail d : rentalDetails) {
+                System.out.println("Rental #" + d.getRentalId() +
+                        " | Vehicle: " + d.getVehicleBrand() + " " + d.getVehicleModel() +
+                        " | Start: " + d.getStartDate() +
+                        " | End: " + d.getEndDate() +
+                        " | Status: " + d.getStatus() +
+                        " | Price: " + d.getPrice() + " TL");
+            }
+        }
     }
 
     private void cancelRental() {

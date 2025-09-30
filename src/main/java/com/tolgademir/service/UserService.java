@@ -15,6 +15,26 @@ public class UserService {
      * // Yeni kullanıcı kaydı oluşturur
      */
     public boolean registerUser(User user) {
+
+        // --- Validation rules ---
+        if (user.getName() == null || user.getName().isBlank()) {
+            throw new RuntimeException("❌ Name cannot be empty.");
+        }
+        if (user.getEmail() == null || !user.getEmail().contains("@")) {
+            throw new RuntimeException("❌ Invalid email format.");
+        }
+        if (!user.getRole().equalsIgnoreCase("ADMIN") &&
+                !user.getRole().equalsIgnoreCase("CUSTOMER")) {
+            throw new RuntimeException("❌ Role must be ADMIN or CUSTOMER.");
+        }
+        if (!user.getAccountType().equalsIgnoreCase("INDIVIDUAL") &&
+                !user.getAccountType().equalsIgnoreCase("CORPORATE")) {
+            throw new RuntimeException("❌ Account type must be INDIVIDUAL or CORPORATE.");
+        }
+        if (user.getAge() <= 0) {
+            throw new RuntimeException("❌ Age must be greater than 0.");
+        }
+
         return userDao.insert(user);
     }
 
