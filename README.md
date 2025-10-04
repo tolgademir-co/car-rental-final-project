@@ -38,7 +38,7 @@ src/main/java/com/tolgademir/rentacar
     - Logout
 
 - **CUSTOMER**
-    - List Vehicles (with pagination & filters)
+    - List Vehicles (with pagination & filtering by type, brand, price range)
     - Rent Vehicles
     - My Rentals (detailed with JOIN)
     - Cancel / Complete Rentals
@@ -59,10 +59,12 @@ src/main/java/com/tolgademir/rentacar
     - On complete → deposit refunded (or adjusted).
 - **Dynamic pricing**:
     - Hourly, Daily, Weekly, Monthly price calculation depending on rental duration.
-- **Transactions**:
-    - Rental creation, cancellation, and completion are handled inside transaction blocks (`commit / rollback`) to ensure data consistency.
+- **Transactions (commit/rollback)**:
+    - Rental creation, cancellation, and completion are handled inside transaction blocks to ensure data consistency.
 - **JOIN Queries**:
     - Rentals are listed with user and vehicle details for both customers and admins.
+- **Filtering & Pagination**:
+  - Vehicles can be listed with pagination and filtered by type, brand, or price range.
 
 ---
 
@@ -121,13 +123,13 @@ Example initial data for testing:
 
    Run schema.sql to create tables.
 
-2. Run schema.sql to create tables.
+2. Run **schema.sql** to create tables.
 
-3. Run seed_data.sql to insert sample users and vehicles.
+3. Run **seed_data.sql** to insert sample users and vehicles.
 
 4. Start the application in IntelliJ:
 
-   └── Main.java
+   └── **Main.java**
 
 5. Login with seed users and test the system.
 

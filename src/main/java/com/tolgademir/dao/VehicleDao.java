@@ -109,6 +109,71 @@ public class VehicleDao {
         return vehicles;
     }
 
+    // ==========================================
+    // 🔍 FILTERING METHODS (Type / Brand / Price)
+    // ==========================================
+
+    /**
+     * Filter vehicles by type
+     * // Araçları tipine göre filtreler (CAR, MOTORCYCLE, HELICOPTER)
+     */
+    public List<Vehicle> findByType(String type) {
+        List<Vehicle> vehicles = new ArrayList<>();
+        String sql = "SELECT * FROM vehicles WHERE UPPER(type) = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, type.toUpperCase());
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                vehicles.add(mapToVehicle(rs));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("❌ Failed to filter vehicles by type: " + e.getMessage(), e);
+        }
+        return vehicles;
+    }
+
+    /**
+     * Filter vehicles by brand
+     * // Araçları markasına göre filtreler
+     */
+    public List<Vehicle> findByBrand(String brand) {
+        List<Vehicle> vehicles = new ArrayList<>();
+        String sql = "SELECT * FROM vehicles WHERE LOWER(brand) LIKE LOWER(?)";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, "%" + brand + "%");
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                vehicles.add(mapToVehicle(rs));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("❌ Failed to filter vehicles by brand: " + e.getMessage(), e);
+        }
+        return vehicles;
+    }
+
+    /**
+     * Filter vehicles by price range
+     * // Araçları belirli fiyat aralığına göre filtreler (günlük fiyat baz alınır)
+     */
+    public List<Vehicle> findByPriceRange(double minPrice, double maxPrice) {
+        List<Vehicle> vehicles = new ArrayList<>();
+        String sql = "SELECT * FROM vehicles WHERE price_daily BETWEEN ? AND ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setDouble(1, minPrice);
+            stmt.setDouble(2, maxPrice);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                vehicles.add(mapToVehicle(rs));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("❌ Failed to filter vehicles by price range: " + e.getMessage(), e);
+        }
+        return vehicles;
+    }
+
     /**
      * Update vehicle
      * // Aracı günceller
